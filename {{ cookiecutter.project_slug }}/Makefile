@@ -78,8 +78,6 @@ help: ## show this message
 
 init: build-docker sync-from-source ## initialize repository for traning
 
-setup-pipenv: # Install 
-
 sync-from-source: ## download data data source to local envrionment
 {%- if cookiecutter.data_source_type == 's3' %}
 	-aws s3 sync $(DATA_SOURCE) ./data/
@@ -95,7 +93,7 @@ build-docker: ## build docker `release` image
 # To use this target you will execute it as the following #
 # make -e stage=test build-docker-stage
 STAGE = test 
-build-docker-target: ## build any stage in the docker file's AS name
+build-docker-target: ## build any stage in the Dockerfile's alias name
 	$(DOCKER) build --target $(STAGE) -f $(DOCKERFILE) --build-arg UID=$(shell id -u) .
 
 build-docker-no-cache: ## initialize docker image without cachhe
