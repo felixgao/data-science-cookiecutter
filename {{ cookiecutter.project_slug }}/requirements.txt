@@ -1,0 +1,11 @@
+awscli
+boto3
+black
+click
+flake8
+jupyter
+matplotlib
+notebook
+pipenv
+pytest
+Sphinx

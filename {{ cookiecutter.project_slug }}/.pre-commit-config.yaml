@@ -1,0 +1,61 @@
+# See https://pre-commit.com/ for usage and config
+repos:
+- repo: git://github.com/pre-commit/pre-commit-hooks
+  rev: v1.2.3
+  hooks:
+  -   id: trailing-whitespace
+  # ensures files are either empty or end with a blank line
+  -   id: end-of-file-fixer
+  # valid python file
+  -   id: check-ast
+  # validates style (see setup.cfg for options)
+  -   id: flake8
+- repo: local
+  hooks:
+  - id: isort
+    name: isort - sort import automatically
+    stages: [commit]
+    language: system
+    entry: pipenv run isort
+    types: [python]
+
+  - id: black
+    name: black - opinionated formatting
+    stages: [commit]
+    language: system
+    entry: pipenv run black
+    types: [python]
+
+  - id: flake8
+    name: flake8
+    stages: [commit]
+    language: system
+    entry: pipenv run flake8
+    types: [python]
+    exclude: setup.py
+
+  - id: mypy
+    name: mypy
+    stages: [commit]
+    language: system
+    pass_filenames: false
+    entry: pipenv run mypy
+    types: [python]
+    pass_filenames: false
+
+  - id: pytest
+    name: pytest
+    stages: [commit]
+    language: system
+    pass_filenames: false
+    entry: pipenv run pytest
+    types: [python]
+
+  - id: pytest-cov
+    name: pytest
+    stages: [push]
+    language: system
+    pass_filenames: false
+    entry: pipenv run pytest --cov --cov-fail-under=100
+    types: [python]
+    pass_filenames: false
