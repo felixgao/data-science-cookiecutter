@@ -1,9 +1,10 @@
 {
-    "project_name": "project_name",
-    "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '_').replace('-', '_') }}",
+    "project_name": "example-project",
+    "project_slug": "{{ cookiecutter.project_slug.lower().replace(' ', '_').replace('-', '_') }}",
     "jupyter_host_port": "8888",
-    "description": "Please Input a short description",
+    "project_description": "Please Input a short description",
     "data_source_type": ["s3", "url"],
     "data_source": "Please Input data source",
+    "use_mkdocs": ["y", "n"],
     "use_nvidia_docker": ["no", "yes"]
 }

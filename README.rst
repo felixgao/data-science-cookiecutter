@@ -54,7 +54,7 @@ Then the cookiecutter command ask for several questions on generated project as 
 ::
 
     $cookiecutter gh:felixgao/data-science-cookiecutter
-    project_name [project_name]: food-image-classification
+    project_slug [project_slug]: food-image-classification
     project_slug [food_image_classification]:
     jupyter_host_port [8888]:
     description [Please Input a short description]: Classify food images into several categories

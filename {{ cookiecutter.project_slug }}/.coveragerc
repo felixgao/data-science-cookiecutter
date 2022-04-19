@@ -1,7 +1,7 @@
 [run]
 source = 
-    {{cookiecutter.project_name}}
-    **/site-packages/{{cookiecutter.project_name}}
+    {{cookiecutter.project_slug}}
+    **/site-packages/{{cookiecutter.project_slug}}
 
 [report]
 exclude_lines =

@@ -55,9 +55,9 @@ export PWD=`pwd`
 export PRINT_HELP_PYSCRIPT
 export START_DOCKER_CONTAINER
 export PYTHONPATH=$PYTHONPATH:$(PWD)
-export PROJECT_NAME={{ cookiecutter.project_slug }}
-export IMAGE_NAME=$(PROJECT_NAME)-image
-export CONTAINER_NAME=$(PROJECT_NAME)-container
+export project_slug={{ cookiecutter.project_slug }}
+export IMAGE_NAME=$(project_slug)-image
+export CONTAINER_NAME=$(project_slug)-container
 export DATA_SOURCE={{ cookiecutter.data_source }}
 export JUPYTER_HOST_PORT={{ cookiecutter.jupyter_host_port }}
 export JUPYTER_CONTAINER_PORT=8888
@@ -65,7 +65,7 @@ export PYTHON=python3
 export DOCKERFILE=docker/Dockerfile
 
 ###########################################################################################################
-## ADD TARGETS SPECIFIC TO "{{ cookiecutter.project_name }}"
+## ADD TARGETS SPECIFIC TO "{{ cookiecutter.project_slug }}"
 ###########################################################################################################
 
 
@@ -117,15 +117,45 @@ start-container: ## start docker container
 jupyter: ## start Jupyter Notebook server
 	jupyter-notebook --ip=0.0.0.0 --port=${JUPYTER_CONTAINER_PORT}
 
-test: ## run test cases in tests directory
-	# $(PYTHON) -m unittest discover
-	$(PYTHON) -m pytest
+install: ## Install the poetry environment
+	@echo "🚀 Creating virtual environment using pyenv and poetry"
+	@poetry install	
+	@poetry shell
 
-lint: ## check style with flake8
-	flake8 {{ cookiecutter.project_slug }}
+format: ## Format code using isort and black.
+	@echo "🚀 Formatting code: Running isort and black"
+	@isort .
+	@black .
+
+lint: ## Check code formatting using isort and black.
+	@echo "🚀 Checking code formatting: Running isort and black"
+	@isort --check-only --diff .
+	@black --check .
+
+test: ## Test the code with pytest
+	@echo "🚀 Testing code: Running pytest"
+	@pytest --doctest-modules
+
+build: clean-build ## Build wheel file using poetry
+	@echo "🚀 Creating wheel file"
+	@poetry build
+
+clean-build: ## clean build artifacts
+	@rm -rf dist
+
+{%- if cookiecutter.mkdocs == "y" %}
+
+docs-test: ## Test if documentation can be built without warnings or errors
+	@mkdocs build -s
+
+docs: ## Build and serve the documentation
+	@mkdocs serve
+
+.PHONY: docs
+{%- endif %}
 
 profile: ## show profile of the project
-	@echo "PROJECT_NAME: $(PROJECT_NAME)"
+	@echo "project_slug: $(project_slug)"
 	@echo "CONTAINER_NAME: $(CONTAINER_NAME)"
 	@echo "IMAGE_NAME: $(IMAGE_NAME)"
 	@echo "JUPYTER_PORT: `$(DOCKER) port $(CONTAINER_NAME)`"

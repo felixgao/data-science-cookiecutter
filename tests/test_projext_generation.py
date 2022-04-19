@@ -31,7 +31,7 @@ def test_default_configuration(cookies, context={}):
     result = cookies.bake(extra_context=context)
     assert result.exit_code == 0
     assert result.exception is None
-    assert result.project.basename == 'project_name'
+    assert result.project.basename == 'project_slug'
     assert result.project.isdir()
     paths = build_files_list(str(result.project))
 
@@ -39,7 +39,7 @@ def test_default_configuration(cookies, context={}):
     check_paths(paths)
 
 
-def test_custom_configuration(cookies, context={'project_name': 'ml project'}):
+def test_custom_configuration(cookies, context={'project_slug': 'ml project'}):
     result = cookies.bake(extra_context=context)
     assert result.exit_code == 0
     assert result.exception is None
