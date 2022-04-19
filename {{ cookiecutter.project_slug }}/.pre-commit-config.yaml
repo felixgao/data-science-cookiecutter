@@ -1,61 +1,97 @@
-# See https://pre-commit.com/ for usage and config
+default_language_version:
+    python: python3.8
+
 repos:
-- repo: git://github.com/pre-commit/pre-commit-hooks
-  rev: v1.2.3
-  hooks:
-  -   id: trailing-whitespace
-  # ensures files are either empty or end with a blank line
-  -   id: end-of-file-fixer
-  # valid python file
-  -   id: check-ast
-  # validates style (see setup.cfg for options)
-  -   id: flake8
-- repo: local
-  hooks:
-  - id: isort
-    name: isort - sort import automatically
-    stages: [commit]
-    language: system
-    entry: pipenv run isort
-    types: [python]
+-   repo: https://github.com/asottile/seed-isort-config
+    rev: v2.2.0
+    hooks:
+    -   id: seed-isort-config
 
-  - id: black
-    name: black - opinionated formatting
-    stages: [commit]
-    language: system
-    entry: pipenv run black
-    types: [python]
+-   repo: https://github.com/pycqa/isort
+    rev: 5.9.3
+    hooks:
+    -   id: isort
+        files: "\\.(py)$"
+        args: [ --settings-path=pyproject.toml ]
 
-  - id: flake8
-    name: flake8
-    stages: [commit]
-    language: system
-    entry: pipenv run flake8
-    types: [python]
-    exclude: setup.py
+-   repo: https://github.com/ambv/black
+    rev: 22.3.0
+    hooks:
+    - id: black
+      language_version: python3.8
+      args: [--config=pyproject.toml]
 
-  - id: mypy
-    name: mypy
-    stages: [commit]
-    language: system
-    pass_filenames: false
-    entry: pipenv run mypy
-    types: [python]
-    pass_filenames: false
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.0.1
+    hooks:
+    -   id: check-yaml
+    -   id: end-of-file-fixer
+    -   id: trailing-whitespace
+    -   id: debug-statements
+    -   id: end-of-file-fixer
+    -   id: name-tests-test
+    -   id: double-quote-string-fixer
 
-  - id: pytest
-    name: pytest
-    stages: [commit]
-    language: system
-    pass_filenames: false
-    entry: pipenv run pytest
-    types: [python]
+-   repo: https://github.com/PyCQA/flake8
+    rev: 3.9.2
+    hooks:
+    -   id: flake8
+        additional_dependencies: 
+        - flake8-bugbear  # Detect potential bugs
+        - flake8-builtins # Check for built-ins being used as variables
+        - flake8-cognitive-complexity # Check max function complexity
+        - flake8-comprehensions # Suggestions for better list/set/dict comprehensions
+        - flake8-eradicate # Find dead/commented out code
+        - flake8-expression-complexity # Check max expression complexity
+        - flake8-fixme # Check for FIXME, TODO, and XXX left in comments
+        - flake8-isort # Check import ordering
+        - flake8-logging-format # Validate (lack of) logging format strings
+        - flake8-mutable # Check for mutable default arguments
+        - flake8-pie # Misc. linting rules
+        - flake8-pytest-style # Check against pytest style guide
+        - flake8-return # Check return statements
+        - flake8-simplify # Suggestions to simplify code
+        - flake8-spellcheck # Spelling checker
+        - flake8-sql # Check SQL statement style
+        - flake8-use-fstring # Encourages use of f-strings vs old style
+        - nitpick # Check that black, flake8, isort have compaible options
+        - pep8-naming # Check PEP8 class naming
 
-  - id: pytest-cov
-    name: pytest
-    stages: [push]
-    language: system
-    pass_filenames: false
-    entry: pipenv run pytest --cov --cov-fail-under=100
-    types: [python]
-    pass_filenames: false
+-   repo: https://github.com/pre-commit/mirrors-autopep8
+    rev: v1.5.7
+    hooks:
+    -   id: autopep8
+        args:
+            - --in-place
+            - --select
+            # autopep8 is used for structure rather than style here, which is why only a few error codes are selected
+            - W292,E502,E266,E402,E713,E714,E721,E722,E731
+
+-   repo: https://github.com/asottile/add-trailing-comma
+    rev: v2.1.0
+    hooks:
+    -   id: add-trailing-comma
+        args: [--py36-plus]
+
+-   repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v0.931
+    hooks:
+    -   id: mypy
+        args: [-v, --config-file, pyproject.toml]
+        # https://github.com/pre-commit/mirrors-mypy/issues/5#issuecomment-946511399
+        exclude: tests/.*
+        additional_dependencies: [types-all]
+
+# hook to ensure doc-string is not missing
+-   repo: https://github.com/econchick/interrogate
+    rev: 1.5.0
+    hooks:
+    - id: interrogate
+    #   args: [-c pyproject.toml]
+
+-   repo: meta
+    hooks:
+    #ensures that the configured hooks apply to at least one file in the repository
+    # Disabled due to no files in this repo that can passes this check yet.
+    # -   id: check-hooks-apply
+    -   id: check-useless-excludes
