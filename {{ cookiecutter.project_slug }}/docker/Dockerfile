@@ -13,11 +13,11 @@ LABEL stage=intermediate
 
 RUN apt-get update && apt-get install -y \
   git \
-  python3.6 \
+  python3.8 \
   python3-pip \
-  python3.6-dev
+  python3.8-dev
 
-RUN pip3 install --upgrade pip pipenv==2018.10.13
+RUN pip3 install --upgrade pip pipenv==2018.10.13 poetry
 
 # The `dev-base` stage is used as the base for images that require
 # the development dependencies. The duplication of the COPY instruction

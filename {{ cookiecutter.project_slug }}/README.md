@@ -1,6 +1,6 @@
 # {{ cookiecutter.project_slug }}
 
-{{ cookiecutter.description }}
+{{ cookiecutter.project_description }}
 
 ## Requirements
 
@@ -34,7 +34,7 @@ such as Vim, Emacs, Atom or PyCharm. The changes in host environment are reflect
 
 ### Update dependencies
 
-When we need to add libraries in `Dockerfile` or `requirements.txt`
+When we need to add libraries in `Dockerfile` or `pyproject.toml`
 which are added to working environment in the Docker container, we need to drop the current Docker container and
 image, and then create them again with the latest setting. To remove the Docker the container and image, run `make clean-docker`
 and then `make init-docker` command to create the Docker container with the latest setting.
@@ -57,14 +57,6 @@ When you check the code quality, please run `make lint`
 
 When you run test in `tests` directory, please run `make test`
 
-### Sync data source to local data directory
-
-When you want to download data in remote data sources such as Amazon S3 `sync-from-remote` target downloads them.
-
-### Sync local data to remote source
-
-When you modify the data in local environment, `sync-to-remote` target uploads the local files stored in `data` to specified data sources such as S3 directories.
-
 ### Show profile of Docker container
 
 When you see the status of Docker container, please run `make profile` in host machine.
@@ -74,6 +66,3 @@ When you see the status of Docker container, please run `make profile` in host m
 To launch Jupyter Notebook, please run `make jupyter` in the Docker container. After launch the Jupyter Notebook, you can
 access the Jupyter Notebook service in http://localhost:{{ cookiecutter.jupyter_host_port }}.
 
-# Credits
-
-This package was created with [Cookiecutter](https://github.com/audreyr/cookiecutter) and the [cookiecutter-docker-science](https://docker-science.github.io/) project template.
